@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 group = "ca.workpatrickwalker.cs20finalproj"
-version = "2.0.1"
+version = "1.0.0"
 repositories {
     mavenCentral()
 }
