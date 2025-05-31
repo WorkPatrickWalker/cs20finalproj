@@ -6,6 +6,8 @@ public class Main {
     
     public static void main(String[] args) 
     {
-        Window.get();
+        Window.set(Window.HD_WIDTH, Window.HD_HEIGHT, Window.TESTING_TITLE_PLACEHOLDER);
+        Window.get().init();
+        Window.get().runLoop();
     }
 }
