@@ -1,5 +1,6 @@
 package ca.workpatrickwalker.engine;
 
+import ca.workpatrickwalker.util.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -159,12 +160,20 @@ public class Window
      */
     public void runLoop()
     {
+        Time.atFrameStart = Time.elapsed();
+        
         while (!glfwWindowShouldClose(glfwWindowRef))
         {
             glfwPollEvents();
+            
             glClearColor(this.r, this.g, this.b, A);
             glClear(GL_COLOR_BUFFER_BIT);
             glfwSwapBuffers(glfwWindowRef);
+            
+            Time.atFrameEnd = Time.elapsed();
+            Time.frameDT = Time.atFrameEnd - Time.atFrameStart;
+            Time.atFrameStart = Time.atFrameEnd;
+            
         }
     }
 
