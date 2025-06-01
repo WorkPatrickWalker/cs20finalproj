@@ -1,7 +1,6 @@
-package ca.workpatrickwalker.engine;
+package ca.workpatrickwalker.cs20finalproj.engine;
 
-import ca.workpatrickwalker.util.Time;
-import org.lwjgl.Version;
+import ca.workpatrickwalker.cs20finalproj.util.Time;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -30,10 +29,12 @@ public class Window
     private static Window instance = null;
     private static Scene scene;
 
+    private float b;
+    private float g;
     private int height;
     private String title;
+    private float r;
     private int width;
-    private float r, g, b;
     
     /**
      * The default singleton constructor.
@@ -207,5 +208,6 @@ public class Window
             default:
                 assert false : "Unknown scene code '" + sceneCode + "'.";
         }
+        scene.init();
     }
 }

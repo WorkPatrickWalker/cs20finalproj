@@ -1,6 +1,6 @@
-package ca.workpatrickwalker;
+package ca.workpatrickwalker.cs20finalproj;
 
-import ca.workpatrickwalker.engine.Window;
+import ca.workpatrickwalker.cs20finalproj.engine.Window;
 
 public class Main {
     

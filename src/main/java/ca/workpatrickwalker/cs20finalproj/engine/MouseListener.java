@@ -1,4 +1,4 @@
-package ca.workpatrickwalker.engine;
+package ca.workpatrickwalker.cs20finalproj.engine;
 
 /**
  * Listens for and handles mouse inputs.
@@ -16,8 +16,13 @@ public class MouseListener
     
     private static MouseListener instance = null;
     
-    private double x, y, lastX, lastY, scrollDX, scrollDY;
     private boolean dragging;
+    private double scrollDX;
+    private double scrollDY;
+    private double lastX;
+    private double lastY;
+    private double x;
+    private double y;
 
     /**
      * The default mouse listener singleton constructor.

@@ -1,4 +1,4 @@
-package ca.workpatrickwalker.engine;
+package ca.workpatrickwalker.cs20finalproj.engine;
 
 /**
  * An abstraction for game scene classes that enforces timed scene updating.
@@ -9,6 +9,14 @@ public abstract class Scene
      * The default scene class constructor.
      */
     public Scene()
+    {
+        
+    }
+
+    /**
+     * The default scene initializer for a scene.
+     */
+    public void init()
     {
         
     }

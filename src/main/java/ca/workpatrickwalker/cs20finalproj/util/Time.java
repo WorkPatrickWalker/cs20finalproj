@@ -1,4 +1,4 @@
-package ca.workpatrickwalker.util;
+package ca.workpatrickwalker.cs20finalproj.util;
 
 /**
  * Manages time calculation.
