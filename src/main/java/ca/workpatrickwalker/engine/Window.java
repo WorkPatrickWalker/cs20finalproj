@@ -11,9 +11,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Creates, manages and displays the game window.
- * 
- * @since 0.1.2
- * @author WorkPatrickWalker
  */
 public class Window 
 {
@@ -41,8 +38,6 @@ public class Window
      * @param width The window's width in pixels.
      * @param height The window's height in pixels.
      * @param title The window's title.
-     * @since 0.1.2
-     * @author WorkPatrickWalker
      */
     private Window(int width, int height, String title)
     {
@@ -58,8 +53,6 @@ public class Window
      * Gets the window instance singleton.
      *
      * @return The window singleton instance.
-     * @since 0.1.2
-     * @author WorkPatrickWalker
      */
     public static Window get()
     {
@@ -72,8 +65,6 @@ public class Window
      * @param width The window's width in pixels.
      * @param height The window's height in pixels.
      * @param title The window's title.
-     * @since 0.1.2
-     * @author WorkPatrickWalker
      */
     public static void setWindow(int width, int height, String title)
     {
@@ -84,8 +75,6 @@ public class Window
      * Sets the r-value of the game window's background.
      * 
      * @param r The new r-value.
-     * @since 0.2.1
-     * @author WorkPatrickWalker
      */
     public static void setR(float r)
     {
@@ -96,8 +85,6 @@ public class Window
      * Sets the g-value of the game window's background.
      *
      * @param g The new g-value.
-     * @since 0.2.1
-     * @author WorkPatrickWalker
      */
     public static void setG(float g)
     {
@@ -108,8 +95,6 @@ public class Window
      * Sets the b-value of the game window's background.
      *
      * @param b The new b-value.
-     * @since 0.2.1
-     * @author WorkPatrickWalker
      */
     public static void setB(float b)
     {
@@ -123,8 +108,6 @@ public class Window
      * @param height The window's height in pixels.
      * @param title The window's title.
      * @throws IllegalStateException If GLFW fails to initialize itself or the game window.
-     * @since 0.1.2
-     * @author WorkPatrickWalker
      */
     public void init()
     {
@@ -154,9 +137,6 @@ public class Window
 
     /**
      * Runs and handles the game loop.
-     * 
-     * @since 0.1.2
-     * @author WorkPatrickWalker
      */
     public void runLoop()
     {
@@ -179,9 +159,6 @@ public class Window
 
     /**
      * Frees the memory that GLFW allocates independent of Java's garbage collection.
-     * 
-     * @since 0.1.3
-     * @author WorkPatricWalker
      */
     public void freeGLFWMem()
     {
