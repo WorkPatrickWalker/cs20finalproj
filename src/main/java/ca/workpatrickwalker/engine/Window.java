@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * Creates, manages and displays the game window.
  * 
- * @since 1.0.0
+ * @since 0.1.2
  * @author WorkPatrickWalker
  */
 public class Window 
@@ -38,7 +38,7 @@ public class Window
      * @param width The window's width in pixels.
      * @param height The window's height in pixels.
      * @param title The window's title.
-     * @since 1.0.0
+     * @since 0.1.2
      * @author WorkPatrickWalker
      */
     private Window(int width, int height, String title)
@@ -52,7 +52,7 @@ public class Window
      * Gets the window instance singleton.
      *
      * @return The window singleton instance.
-     * @since 1.0.0
+     * @since 0.1.2
      * @author WorkPatrickWalker
      */
     public static Window get()
@@ -66,7 +66,7 @@ public class Window
      * @param width The window's width in pixels.
      * @param height The window's height in pixels.
      * @param title The window's title.
-     * @since 1.0.0
+     * @since 0.1.2
      * @author WorkPatrickWalker
      */
     public static void set(int width, int height, String title)
@@ -81,7 +81,7 @@ public class Window
      * @param height The window's height in pixels.
      * @param title The window's title.
      * @throws IllegalStateException If GLFW fails to initialize itself or the game window.
-     * @since 1.0.0
+     * @since 0.1.2
      * @author WorkPatrickWalker
      */
     public void init()
@@ -108,7 +108,7 @@ public class Window
     /**
      * Runs and handles the game loop.
      * 
-     * @since 1.0.0
+     * @since 0.1.2
      * @author WorkPatrickWalker
      */
     public void runLoop()
