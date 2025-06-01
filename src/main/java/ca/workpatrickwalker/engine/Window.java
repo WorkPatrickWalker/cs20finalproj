@@ -16,6 +16,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Window 
 {
+    private static final float A = 1.0f;
     private static final long DEFAULT_MONITOR = 0L;
     private static final long GLFW_WINDOW_CREATION_FAILED = 0L;
     private static final long NO_SHARING = 0L;
@@ -31,6 +32,7 @@ public class Window
     private int height;
     private String title;
     private int width;
+    private float r, g, b;
     
     /**
      * The default singleton constructor.
@@ -46,6 +48,9 @@ public class Window
         this.width = width;
         this.height = height;
         this.title = title;
+        this.r = 1.0f;
+        this.g = 1.0f;
+        this.b = 1.0f;
     }
 
     /**
@@ -72,6 +77,42 @@ public class Window
     public static void setWindow(int width, int height, String title)
     {
         if (instance == null) instance = new Window(width, height, title);
+    }
+
+    /**
+     * Sets the r-value of the game window's background.
+     * 
+     * @param r The new r-value.
+     * @since 0.2.1
+     * @author WorkPatrickWalker
+     */
+    public static void setR(float r)
+    {
+        if (instance != null) instance.r = r;
+    }
+
+    /**
+     * Sets the g-value of the game window's background.
+     *
+     * @param g The new g-value.
+     * @since 0.2.1
+     * @author WorkPatrickWalker
+     */
+    public static void setG(float g)
+    {
+        if (instance != null) instance.g = g;
+    }
+
+    /**
+     * Sets the b-value of the game window's background.
+     *
+     * @param b The new b-value.
+     * @since 0.2.1
+     * @author WorkPatrickWalker
+     */
+    public static void setB(float b)
+    {
+        if (instance != null) instance.b = b;
     }
 
     /**
@@ -121,7 +162,7 @@ public class Window
         while (!glfwWindowShouldClose(glfwWindowRef))
         {
             glfwPollEvents();
-            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            glClearColor(this.r, this.g, this.b, A);
             glClear(GL_COLOR_BUFFER_BIT);
             glfwSwapBuffers(glfwWindowRef);
         }
