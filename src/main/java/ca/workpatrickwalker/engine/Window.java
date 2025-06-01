@@ -4,6 +4,7 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -120,5 +121,19 @@ public class Window
             glClear(GL_COLOR_BUFFER_BIT);
             glfwSwapBuffers(glfwWindowRef);
         }
+    }
+
+    /**
+     * Frees the memory that GLFW allocates independent of Java's garbage collection.
+     * 
+     * @since 0.1.3
+     * @author WorkPatricWalker
+     */
+    public void freeGLFWMem()
+    {
+        glfwFreeCallbacks(glfwWindowRef);
+        glfwDestroyWindow(glfwWindowRef);
+        glfwTerminate();
+        glfwSetErrorCallback(null).free();
     }
 }
