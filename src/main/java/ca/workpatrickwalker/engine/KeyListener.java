@@ -1,0 +1,81 @@
+package ca.workpatrickwalker.engine;
+
+/**
+ * Listens for and handles keyboard inputs.
+ * @since 0.2.0
+ * @author WorkPatrickWalker
+ */
+public class KeyListener 
+{
+    private static final int PRESSED = 1;
+    private static final int RELEASED = 0;
+    private static final int STANDARD_KEYS = 350;
+    
+    private final boolean[] keyStates = new boolean[STANDARD_KEYS];
+
+    private static KeyListener instance = null;
+
+    /**
+     * The default key listener singleton constructor.
+     * 
+     * @since 0.2.0
+     * @author WorkPatrickWalker
+     */
+    private KeyListener()
+    {
+        
+    }
+
+    /**
+     * Gets the key listener singleton instance and creates one if one does not already exist.
+     * 
+     * @return The key listener singleton instance.
+     * @since 0.2.0
+     * @author WorkPatrickWalker
+     */
+    public static KeyListener get()
+    {
+        if (instance == null) instance = new KeyListener();
+        return instance;
+    }
+
+    /**
+     * Updates a key's state when an action involving it is detected.
+     * 
+     * @param window The GLFW window.
+     * @param key The key the action was performed on.
+     * @param scancode The key's scancode.
+     * @param action The action performed on the key.
+     * @param mods Modifier keys that were pressed down when the action was performed.
+     * @since 0.2.0
+     * @author WorkPatrickWalker
+     */
+    public static void keyCallback(@SuppressWarnings("unused") long window, int key, @SuppressWarnings("unused") int scancode, int action, int mods)
+    {
+        if (key < STANDARD_KEYS)
+        {
+            if (action == PRESSED)
+            {
+                get().keyStates[key] = true;
+            }
+            else if (action == RELEASED)
+            {
+                get().keyStates[key] = false;
+            }
+        }
+    }
+
+    /**
+     * Checks if a specific key is being pressed or not.
+     * 
+     * @param key The key being checked.
+     * @return If the key is being pressed or not.
+     * @since 0.2.0
+     * @author WorkPatrickWalker
+     */
+    public static boolean keyPressed(int key)
+    {
+        if (key < STANDARD_KEYS) return get().keyStates[key];
+        return false;
+    }
+}

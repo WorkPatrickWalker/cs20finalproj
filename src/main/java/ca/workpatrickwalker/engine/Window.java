@@ -32,7 +32,6 @@ public class Window
     private String title;
     private int width;
     
-
     /**
      * The default singleton constructor.
      *
@@ -70,7 +69,7 @@ public class Window
      * @since 0.1.2
      * @author WorkPatrickWalker
      */
-    public static void set(int width, int height, String title)
+    public static void setWindow(int width, int height, String title)
     {
         if (instance == null) instance = new Window(width, height, title);
     }
@@ -96,6 +95,11 @@ public class Window
 
         glfwWindowRef = glfwCreateWindow(this.width, this.height, this.title, DEFAULT_MONITOR, NO_SHARING);
         if (glfwWindowRef == GLFW_WINDOW_CREATION_FAILED) throw new IllegalStateException("GLFW failed to create the window.");
+        
+        glfwSetCursorPosCallback(glfwWindowRef, MouseListener::mousePosCallback);
+        glfwSetMouseButtonCallback(glfwWindowRef, MouseListener::mouseButtonCallback);
+        glfwSetScrollCallback(glfwWindowRef, MouseListener::mouseScrollCallback);
+        glfwSetKeyCallback(glfwWindowRef, KeyListener::keyCallback);
 
         glfwMakeContextCurrent(glfwWindowRef);
 
