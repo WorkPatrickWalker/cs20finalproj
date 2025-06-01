@@ -17,6 +17,8 @@ public class Window
     private static final float A = 1.0f;
     private static final long DEFAULT_MONITOR = 0L;
     private static final long GLFW_WINDOW_CREATION_FAILED = 0L;
+    private static final int LEVEL_EDITOR_SCENE = 0;
+    private static final int LEVEL_SCENE = 1;
     private static final long NO_SHARING = 0L;
     private static final int VSYNC_ENABLED = 1;
     
@@ -26,6 +28,7 @@ public class Window
 
     private static long glfwWindowRef;
     private static Window instance = null;
+    private static Scene scene;
 
     private int height;
     private String title;
@@ -50,6 +53,17 @@ public class Window
     }
 
     /**
+     * Frees the memory that GLFW allocates independent of Java's garbage collection.
+     */
+    public void freeGLFWMem()
+    {
+        glfwFreeCallbacks(glfwWindowRef);
+        glfwDestroyWindow(glfwWindowRef);
+        glfwTerminate();
+        glfwSetErrorCallback(null).free();
+    }
+
+    /**
      * Gets the window instance singleton.
      *
      * @return The window singleton instance.
@@ -58,52 +72,10 @@ public class Window
     {
         return instance;
     }
-    
-    /**
-     * Sets the window instance singleton if one does not already exist.
-     *
-     * @param width The window's width in pixels.
-     * @param height The window's height in pixels.
-     * @param title The window's title.
-     */
-    public static void setWindow(int width, int height, String title)
-    {
-        if (instance == null) instance = new Window(width, height, title);
-    }
-
-    /**
-     * Sets the r-value of the game window's background.
-     * 
-     * @param r The new r-value.
-     */
-    public static void setR(float r)
-    {
-        if (instance != null) instance.r = r;
-    }
-
-    /**
-     * Sets the g-value of the game window's background.
-     *
-     * @param g The new g-value.
-     */
-    public static void setG(float g)
-    {
-        if (instance != null) instance.g = g;
-    }
-
-    /**
-     * Sets the b-value of the game window's background.
-     *
-     * @param b The new b-value.
-     */
-    public static void setB(float b)
-    {
-        if (instance != null) instance.b = b;
-    }
 
     /**
      * Initializes the game window and GLFW, and displays the game window to the monitor.
-     * 
+     *
      * @param width The window's width in pixels.
      * @param height The window's height in pixels.
      * @param title The window's title.
@@ -120,7 +92,7 @@ public class Window
 
         glfwWindowRef = glfwCreateWindow(this.width, this.height, this.title, DEFAULT_MONITOR, NO_SHARING);
         if (glfwWindowRef == GLFW_WINDOW_CREATION_FAILED) throw new IllegalStateException("GLFW failed to create the window.");
-        
+
         glfwSetCursorPosCallback(glfwWindowRef, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(glfwWindowRef, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindowRef, MouseListener::mouseScrollCallback);
@@ -136,35 +108,104 @@ public class Window
     }
 
     /**
-     * Runs and handles the game loop.
+     * Runs and handles the game loop and its timing.
      */
     public void runLoop()
     {
-        Time.atFrameStart = Time.elapsed();
+        float timeAtFrameStart = Time.elapsed();
+        float timeAtFrameEnd;
         
+        // Creates a lag of 2 frames initially
+        float frameDT = -1.0f;
+        
+        setScene(LEVEL_EDITOR_SCENE);
+
         while (!glfwWindowShouldClose(glfwWindowRef))
         {
             glfwPollEvents();
+
+            setBg();
             
-            glClearColor(this.r, this.g, this.b, A);
-            glClear(GL_COLOR_BUFFER_BIT);
+            if (frameDT >= 0) scene.update(frameDT);
+            
             glfwSwapBuffers(glfwWindowRef);
-            
-            Time.atFrameEnd = Time.elapsed();
-            Time.frameDT = Time.atFrameEnd - Time.atFrameStart;
-            Time.atFrameStart = Time.atFrameEnd;
-            
+
+            timeAtFrameEnd = Time.elapsed();
+            frameDT = timeAtFrameEnd - timeAtFrameStart;
+            timeAtFrameStart = timeAtFrameEnd;
         }
     }
 
     /**
-     * Frees the memory that GLFW allocates independent of Java's garbage collection.
+     * Sets the window instance singleton if one does not already exist.
+     *
+     * @param width The window's width in pixels.
+     * @param height The window's height in pixels.
+     * @param title The window's title.
      */
-    public void freeGLFWMem()
+    public static void set(int width, int height, String title)
     {
-        glfwFreeCallbacks(glfwWindowRef);
-        glfwDestroyWindow(glfwWindowRef);
-        glfwTerminate();
-        glfwSetErrorCallback(null).free();
+        if (instance == null) instance = new Window(width, height, title);
+    }
+
+    /**
+     * Sets the b-value of the game window's background.
+     *
+     * @param b The new b-value.
+     */
+    public static void setB(float b)
+    {
+        if (instance != null) instance.b = b;
+    }
+
+    /**
+     * Flushes the game window's background.
+     */
+    public void setBg()
+    {
+        glClearColor(this.r, this.g, this.b, A);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    /**
+     * Sets the g-value of the game window's background.
+     *
+     * @param g The new g-value.
+     */
+    public static void setG(float g)
+    {
+        if (instance != null) instance.g = g;
+    }
+
+    /**
+     * Sets the r-value of the game window's background.
+     * 
+     * @param r The new r-value.
+     */
+    public static void setR(float r)
+    {
+        if (instance != null) instance.r = r;
+    }
+
+    /**
+     * Set the window's current scene.
+     * 
+     * @param sceneCode Which type of scene the window is changing to.
+     */
+    public static void setScene(int sceneCode)
+    {
+        switch (sceneCode)
+        {
+            case LEVEL_SCENE:
+                scene = new LevelScene();
+                break;
+                
+            case LEVEL_EDITOR_SCENE:
+                scene = new LevelEditorScene();
+                break;
+                
+            default:
+                assert false : "Unknown scene code '" + sceneCode + "'.";
+        }
     }
 }

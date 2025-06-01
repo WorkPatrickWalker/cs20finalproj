@@ -2,24 +2,19 @@ package ca.workpatrickwalker.engine;
 
 /**
  * Listens for and handles keyboard inputs.
- * @since 0.2.0
- * @author WorkPatrickWalker
  */
 public class KeyListener 
 {
     private static final int PRESSED = 1;
     private static final int RELEASED = 0;
-    private static final int STANDARD_KEYS = 350;
+    private static final int STANDARD_KEYCODES = 350;
     
-    private final boolean[] keyStates = new boolean[STANDARD_KEYS];
+    private final boolean[] keyStates = new boolean[STANDARD_KEYCODES];
 
     private static KeyListener instance = null;
 
     /**
      * The default key listener singleton constructor.
-     * 
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     private KeyListener()
     {
@@ -30,8 +25,6 @@ public class KeyListener
      * Gets the key listener singleton instance and creates one if one does not already exist.
      * 
      * @return The key listener singleton instance.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static KeyListener get()
     {
@@ -43,24 +36,22 @@ public class KeyListener
      * Updates a key's state when an action involving it is detected.
      * 
      * @param window The GLFW window.
-     * @param key The key the action was performed on.
+     * @param keyCode The key the action was performed on.
      * @param scancode The key's scancode.
      * @param action The action performed on the key.
      * @param mods Modifier keys that were pressed down when the action was performed.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
-    public static void keyCallback(@SuppressWarnings("unused") long window, int key, @SuppressWarnings("unused") int scancode, int action, int mods)
+    public static void keyCallback(@SuppressWarnings("unused") long window, int keyCode, @SuppressWarnings("unused") int scancode, int action, int mods)
     {
-        if (key < STANDARD_KEYS)
+        if (keyCode < STANDARD_KEYCODES)
         {
             if (action == PRESSED)
             {
-                get().keyStates[key] = true;
+                get().keyStates[keyCode] = true;
             }
             else if (action == RELEASED)
             {
-                get().keyStates[key] = false;
+                get().keyStates[keyCode] = false;
             }
         }
     }
@@ -68,14 +59,12 @@ public class KeyListener
     /**
      * Checks if a specific key is being pressed or not.
      * 
-     * @param key The key being checked.
+     * @param keyCode The key being checked.
      * @return If the key is being pressed or not.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
-    public static boolean keyPressed(int key)
+    public static boolean keyPressed(int keyCode)
     {
-        if (key < STANDARD_KEYS) return get().keyStates[key];
+        if (keyCode < STANDARD_KEYCODES) return get().keyStates[keyCode];
         return false;
     }
 }

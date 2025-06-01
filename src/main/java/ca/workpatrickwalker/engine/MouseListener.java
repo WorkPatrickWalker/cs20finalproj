@@ -2,9 +2,6 @@ package ca.workpatrickwalker.engine;
 
 /**
  * Listens for and handles mouse inputs.
- * 
- * @since 0.2.0
- * @author WorkPatrickWalker
  */
 public class MouseListener 
 {
@@ -24,9 +21,6 @@ public class MouseListener
 
     /**
      * The default mouse listener singleton constructor.
-     * 
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     private MouseListener()
     {
@@ -43,8 +37,6 @@ public class MouseListener
      * Gets the mouse listener singleton instance and creates one if one does not already exist.
      * 
      * @return The mouse listener singleton instance.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static MouseListener get()
     {
@@ -53,32 +45,22 @@ public class MouseListener
     }
 
     /**
-     * Updates the mouse's position variables when movement is detected.
-     * 
-     * @param window The GLFW window.
-     * @param x The mouse's current x position.
-     * @param y The mouse's current y position.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
+     * Gets the mouse's dragging state.
+     *
+     * @return If the mouse is dragging or not.
      */
-    public static void mousePosCallback(@SuppressWarnings("unused") long window, double x, double y)
+    public static boolean isDragging()
     {
-        get().lastX = get().x;
-        get().lastY = get().y;
-        get().x = x;
-        get().y = y;
-        get().dragging = get().mouseButtonStates[LEFT_MOUSE_BUTTON] || get().mouseButtonStates[CENTER_MOUSE_BUTTON] || get().mouseButtonStates[RIGHT_MOUSE_BUTTON];
+        return get().dragging;
     }
 
     /**
      * Updates a mouse button's state when an action involving it is detected.
-     * 
+     *
      * @param window The GLFW window.
      * @param button The button the action was performed on.
      * @param action The action performed.
      * @param mods Modifier keys that were being pressed down when the action was performed.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static void mouseButtonCallback(@SuppressWarnings("unused") long window, int button, int action, int mods)
     {
@@ -97,13 +79,39 @@ public class MouseListener
     }
 
     /**
+     * Checks if a specific button is being pressed or not.
+     *
+     * @param button The button being checked.
+     * @return If the button is being pressed or not.
+     */
+    public static boolean mouseButtonsPressed(int button)
+    {
+        if (button < STANDARD_MOUSE_BUTTONS) return get().mouseButtonStates[button];
+        return false;
+    }
+
+    /**
+     * Updates the mouse's position variables when movement is detected.
+     * 
+     * @param window The GLFW window.
+     * @param x The mouse's current x position.
+     * @param y The mouse's current y position.
+     */
+    public static void mousePosCallback(@SuppressWarnings("unused") long window, double x, double y)
+    {
+        get().lastX = get().x;
+        get().lastY = get().y;
+        get().x = x;
+        get().y = y;
+        get().dragging = get().mouseButtonStates[LEFT_MOUSE_BUTTON] || get().mouseButtonStates[CENTER_MOUSE_BUTTON] || get().mouseButtonStates[RIGHT_MOUSE_BUTTON];
+    }
+
+    /**
      * Updates the mouse scroll wheel's displacement variables when scrolling is detected.
      * 
      * @param window The GLFW window.
      * @param dX The mouse scroll wheel's horizontal displacement.
      * @param dY The mouse scroll wheel's vertical displacement.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static void mouseScrollCallback(@SuppressWarnings("unused") long window, double dX, double dY)
     {
@@ -113,9 +121,6 @@ public class MouseListener
 
     /**
      * Zeroes displacement-related variables at the end of a frame.
-     * 
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static void reset()
     {
@@ -126,35 +131,9 @@ public class MouseListener
     }
 
     /**
-     * Gets the mouse's current x position.
-     * 
-     * @return The mouse's current x position.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
-     */
-    public static float getX()
-    {
-        return (float) get().x;
-    }
-
-    /**
-     * Gets the mouse's current y position.
-     *
-     * @return The mouse's current y position.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
-     */
-    public static float getY()
-    {
-        return (float) get().y;
-    }
-
-    /**
      * Gets the mouse's current x displacement.
      *
      * @return The mouse's current x displacement.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static float getDX()
     {
@@ -165,8 +144,6 @@ public class MouseListener
      * Gets the mouse's current y displacement.
      *
      * @return The mouse's current y displacement.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static float getDY()
     {
@@ -177,8 +154,6 @@ public class MouseListener
      * Gets the mouse scroll wheel's current x displacement.
      *
      * @return The mouse scroll wheel's current x displacement.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static float getScrollDX()
     {
@@ -189,8 +164,6 @@ public class MouseListener
      * Gets the mouse scroll wheel's current y displacement.
      *
      * @return The mouse scroll wheel's current y displacement.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
      */
     public static float getScrollDY()
     {
@@ -198,28 +171,22 @@ public class MouseListener
     }
 
     /**
-     * Checks if a specific button is being pressed or not.
-     *
-     * @param button The button being checked.
-     * @return If the button is being pressed or not.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
+     * Gets the mouse's current x position.
+     * 
+     * @return The mouse's current x position.
      */
-    public static boolean mouseButtonsPressed(int button)
+    public static float getX()
     {
-        if (button < STANDARD_MOUSE_BUTTONS) return get().mouseButtonStates[button];
-        return false;
+        return (float) get().x;
     }
 
     /**
-     * Gets the mouse's dragging state.
-     * 
-     * @return If the mouse is dragging or not.
-     * @since 0.2.0
-     * @author WorkPatrickWalker
+     * Gets the mouse's current y position.
+     *
+     * @return The mouse's current y position.
      */
-    public static boolean isDragging()
+    public static float getY()
     {
-        return get().dragging;
+        return (float) get().y;
     }
 }
