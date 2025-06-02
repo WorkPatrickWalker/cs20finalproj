@@ -1,5 +1,6 @@
 package ca.workpatrickwalker.cs20finalproj.engine;
 
+import ca.workpatrickwalker.cs20finalproj.renderer.Shader;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -67,10 +68,10 @@ public class LevelEditorScene extends Scene
             """;
     private float[] vertices =
             {
-                    0.5f,   0.5f,   0.0f,       0.0f,   0.0f,   1.0f,   1.0f,
+                    0.5f,   0.5f,   0.0f,       1.0f,   0.0f,   1.0f,   1.0f,
                     -0.5f,  0.5f,   0.0f,       0.0f,   1.0f,   0.0f,   1.0f,
                     -0.5f,  -0.5f,  0.0f,       1.0f,   1.0f,   0.0f,   1.0f,
-                    0.5f,  -0.5f,  0.0f,       1.0f,   0.0f,   0.0f,   1.0f
+                    0.5f,  -0.5f,  0.0f,        1.0f,   0.0f,   0.0f,   1.0f
             };
     
     /**
