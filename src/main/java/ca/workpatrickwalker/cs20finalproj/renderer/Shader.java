@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
- * Handles the creation, 
+ * Handles the creation, compilation and de/attachment of shaders.
  */
 public class Shader 
 {
@@ -26,8 +26,14 @@ public class Shader
     private int program;
     private int vertexID;
     private String vertexSrc;
-    
-    
+
+
+    /**
+     * Reads in the inputted .glsl file, searching for shader components (vertex, fragment) and recording them.
+     * Kills on assertion if the .glsl file does not contain exactly one vertex component and one fragment component.
+     * 
+     * @param fileName The name of the target .glsl file
+     */
     public Shader(String fileName)
     {
         this.filePath = "shaders/" + fileName + ".glsl";
@@ -72,7 +78,7 @@ public class Shader
     }
 
     /**
-     * Compiles the shader components. Throws an assertion if GL fails.
+     * Compiles the shader components. Kills on assertion if GL fails.
      */
     public void compile()
     {
@@ -103,14 +109,17 @@ public class Shader
         System.out.println(vertexSrc);
         System.out.println(fragmentSrc);
     }
-    
+
+    /**
+     * Takes the shader out of use.
+     */
     public void detach()
     {
         glUseProgram(UNBIND);
     }
 
     /**
-     * Links the level editor scene's shaders. Throws an assertion if GL fails.
+     * Links the shader's components. Kills on assertion if GL fails.
      */
     public void link()
     {
@@ -127,7 +136,10 @@ public class Shader
             assert false : "";
         }
     }
-    
+
+    /**
+     * Puts the shader into use.
+     */
     public void use()
     {
         glUseProgram(program);
