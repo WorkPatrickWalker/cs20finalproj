@@ -4,16 +4,27 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static org.lwjgl.opengl.GL20.*;
+
+/**
+ * Handles the creation, 
+ */
 public class Shader 
 {
     private static final int COMPONENT1_BODY = 1;
     private static final int COMPONENT2_BODY = 2;
+    private static final int GL_FAILED = 0;
     private static final int TWO_COMPONENTS = 3;
+    private static final int UNBIND = 0;
+    
+    public static final String DEFAULT = "default";
     
     private final String filePath;
     
+    private int fragmentID;
     private String fragmentSrc;
-    private int programID;
+    private int program;
+    private int vertexID;
     private String vertexSrc;
     
     
@@ -58,23 +69,67 @@ public class Shader
             else fragmentSrc = splitFileSrc[COMPONENT2_BODY];
         }
         else assert false : "Error: Unknown shader type: '" + component2 + "'.";
-
-        System.out.println(vertexSrc);
-        System.out.println(fragmentSrc);
     }
 
+    /**
+     * Compiles the shader components. Throws an assertion if GL fails.
+     */
     public void compile()
     {
+        vertexID = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertexID, vertexSrc);
+        glCompileShader(vertexID);
+
+        if (glGetShaderi(vertexID, GL_COMPILE_STATUS) == GL_FAILED)
+        {
+            System.out.println("ERROR: '" + filePath + "'\n\tVertex shader compilation failed.");
+            // Since GL is written in C, we need to pass it the length of the info log as well
+            System.out.println(glGetShaderInfoLog(vertexID, glGetShaderi(vertexID, GL_INFO_LOG_LENGTH)));
+            assert false : "";
+        }
         
+        fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragmentID, fragmentSrc);
+        glCompileShader(fragmentID);
+
+        if (glGetShaderi(fragmentID, GL_COMPILE_STATUS) == GL_FAILED)
+        {
+            System.out.println("ERROR: '" + filePath + "'\n\tFragment shader compilation failed.");
+            // Since GL is written in C, we need to pass it the length of the info log as well
+            System.out.println(glGetShaderInfoLog(fragmentID, glGetShaderi(fragmentID, GL_INFO_LOG_LENGTH)));
+            assert false : "";
+        }
+        
+        System.out.println(vertexSrc);
+        System.out.println(fragmentSrc);
     }
     
     public void detach()
     {
-        
+        glUseProgram(UNBIND);
+    }
+
+    /**
+     * Links the level editor scene's shaders. Throws an assertion if GL fails.
+     */
+    public void link()
+    {
+        program = glCreateProgram();
+        glAttachShader(program, vertexID);
+        glAttachShader(program, fragmentID);
+        glLinkProgram(program);
+
+        if (glGetProgrami(program, GL_LINK_STATUS) == GL_FAILED)
+        {
+            System.out.println("ERROR: '" + filePath + "'\n\tShader linking failed.");
+            // Since GL is written in C, we need to pass it the length of the info log as well
+            System.out.println(glGetProgramInfoLog(program, glGetProgrami(program, GL_INFO_LOG_LENGTH)));
+            assert false : "";
+        }
     }
     
     public void use()
     {
-        
+        glUseProgram(program);
     }
 }

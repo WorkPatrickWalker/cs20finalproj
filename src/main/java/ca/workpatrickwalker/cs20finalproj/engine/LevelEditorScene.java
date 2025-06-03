@@ -16,7 +16,6 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public class LevelEditorScene extends Scene 
 {
     private static final int ALL_ELEMENTS = 0;
-    private static final int GL_FAILED = 0;
     private static final int COLOUR_ATTRIBS = 4;
     private static final int COLOUR_ATTRIBS_INDEX = 1;
     private static final int COLOUR_ATTRIBS_OFFSET = 12;
@@ -47,6 +46,7 @@ public class LevelEditorScene extends Scene
                         colour = fragColour;
                     }
             """;
+    private Shader shader;
     private int shaderProg;
     private int vAOID;
     private int vBOID;
@@ -87,48 +87,11 @@ public class LevelEditorScene extends Scene
      */
     public void bindVertices()
     {
-        glUseProgram(shaderProg);
         glBindVertexArray(vAOID);
         glEnableVertexAttribArray(POS_ATTRIBS_INDEX);
         glEnableVertexAttribArray(COLOUR_ATTRIBS_INDEX);
     }
-
-    /**
-     * Compiles the level editor scene's fragment shader. Throws an assertion if GL fails.
-     */
-    public void compileFrag()
-    {
-        fragID = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragID, fragSrc);
-        glCompileShader(fragID);
-
-        if (glGetShaderi(fragID, GL_COMPILE_STATUS) == GL_FAILED)
-        {
-            System.out.println("ERROR: 'default.glsl'\n\tFragment shader compilation failed.");
-            // Since GL is written in C, we need to pass it the length of the info log as well
-            System.out.println(glGetShaderInfoLog(fragID, glGetShaderi(fragID, GL_INFO_LOG_LENGTH)));
-            assert false : "";
-        }
-    }
-
-    /**
-     * Compiles the level editor scene's vertex shader. Throws an assertion if GL fails.
-     */
-    public void compileVertex()
-    {
-        vertexID = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexID, vertexSrc);
-        glCompileShader(vertexID);
-        
-        if (glGetShaderi(vertexID, GL_COMPILE_STATUS) == GL_FAILED)
-        {
-            System.out.println("ERROR: 'default.glsl'\n\tVertex shader compilation failed.");
-            // Since GL is written in C, we need to pass it the length of the info log as well
-            System.out.println(glGetShaderInfoLog(vertexID, glGetShaderi(vertexID, GL_INFO_LOG_LENGTH)));
-            assert false : "";
-        }
-    }
-
+    
     /**
      * Draws the in-use vertices to the game window.
      */
@@ -179,32 +142,13 @@ public class LevelEditorScene extends Scene
      */
     @Override public void init()
     {
-        compileVertex();
-        compileFrag();
-        linkShaders();
+        shader = new Shader(Shader.DEFAULT);
+        shader.compile();
+        shader.link();
         genVAOs();
         genVBOs();
         genEBOs();
         setVertexAttribs();
-    }
-
-    /**
-     * Links the level editor scene's shaders. Throws an assertion if GL fails.
-     */
-    public void linkShaders()
-    {
-        shaderProg = glCreateProgram();
-        glAttachShader(shaderProg, vertexID);
-        glAttachShader(shaderProg, fragID);
-        glLinkProgram(shaderProg);
-        
-        if (glGetProgrami(shaderProg, GL_LINK_STATUS) == GL_FAILED)
-        {
-            System.out.println("ERROR: 'default.glsl'\n\tShader linking failed.");
-            // Since GL is written in C, we need to pass it the length of the info log as well
-            System.out.println(glGetProgramInfoLog(shaderProg, glGetProgrami(vertexID, GL_INFO_LOG_LENGTH)));
-            assert false : "";
-        }
     }
 
     /**
@@ -227,7 +171,7 @@ public class LevelEditorScene extends Scene
         glDisableVertexAttribArray(COLOUR_ATTRIBS_INDEX);
 
         glBindVertexArray(UNBIND);
-        glUseProgram(UNBIND);
+        
     }
 
     /**
@@ -237,8 +181,10 @@ public class LevelEditorScene extends Scene
      */
     @Override public void update(float dT)
     {
+        shader.use();
         bindVertices();
         draw();
         unbindVertices();
+        shader.detach();
     }
 }
